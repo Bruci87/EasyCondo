@@ -10,6 +10,7 @@ async function carregarAreas(){
 
         const areas =
             await res.json();
+        console.log("Áreas recebidas:", areas);
 
         const lista =
             document.getElementById("listaAreas");
@@ -263,30 +264,6 @@ async(e)=>{
     }
 
 });
-
-
-if(!resposta.ok){
-
-    const erro =
-        await resposta.json();
-
-    alert(
-        erro.detail ||
-        "Erro ao salvar área"
-    );
-
-    return;
-}
-
-
-alert("Área salva com sucesso");
-
-cancelarEdicao();
-
-carregarAreas();
-
-
-
 
 async function alternarStatus(id){
 
