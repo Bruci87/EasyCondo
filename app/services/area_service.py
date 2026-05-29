@@ -1,22 +1,23 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+
 from app.models.area import Area
 from app.schemas.area import AreaCreate
 
+from app.repositories import area_repository
+
 
 def listar_area(db: Session):
-    return db.query(Area).all()
+    return area_repository.listar(db)
 
 
 def criar_area(db: Session, area_data: AreaCreate):
 
     area_existente = (
-        db.query(Area)
-        .filter(
-            Area.nome == area_data.nome,
-            Area.ativo == True
+        area_repository.buscar_area_ativa_por_nome(
+            db,
+            area_data.nome
         )
-        .first()
     )
 
     if area_existente:
@@ -27,42 +28,38 @@ def criar_area(db: Session, area_data: AreaCreate):
 
     nova_area = Area(**area_data.model_dump())
 
-    db.add(nova_area)
-    db.commit()
-    db.refresh(nova_area)
-
-    return nova_area
+    return area_repository.criar(db, nova_area)
 
 
 def eliminar_area(db: Session, area_id: int):
-    area = db.query(Area).filter(Area.id == area_id).first()
 
-    if area:
-        db.delete(area)
-        db.commit()
-        return True
+    area = area_repository.buscar_por_id(db, area_id)
 
-    return False
+    if not area:
+        return False
+
+    area_repository.deletar(db, area)
+
+    return True
 
 
-def atualizar_area(db: Session, area_id: int, area_data: AreaCreate):
+def atualizar_area(
+    db: Session,
+    area_id: int,
+    area_data: AreaCreate
+):
 
-    area = db.query(Area).filter(
-        Area.id == area_id
-    ).first()
+    area = area_repository.buscar_por_id(db, area_id)
 
     if not area:
         return None
 
-
     area_existente = (
-        db.query(Area)
-        .filter(
-            Area.nome == area_data.nome,
-            Area.ativo == True,
-            Area.id != area_id
+        area_repository.buscar_area_ativa_por_nome_excluindo_id(
+            db,
+            area_data.nome,
+            area_id
         )
-        .first()
     )
 
     if area_existente:
@@ -71,26 +68,22 @@ def atualizar_area(db: Session, area_id: int, area_data: AreaCreate):
             detail="Já existe uma área ativa com esse nome."
         )
 
-
     for key, value in area_data.model_dump().items():
         setattr(area, key, value)
 
-    db.commit()
-    db.refresh(area)
-
-    return area
+    return area_repository.salvar(db, area)
 
 
-def alternar_status_area(db: Session, area_id: int):
+def alternar_status_area(
+    db: Session,
+    area_id: int
+):
 
-    area = db.query(Area).filter(
-        Area.id == area_id
-    ).first()
+    area = area_repository.buscar_por_id(db, area_id)
 
-    if area:
-        area.ativo = not area.ativo
+    if not area:
+        return None
 
-        db.commit()
-        db.refresh(area)
+    area.ativo = not area.ativo
 
-    return area
+    return area_repository.salvar(db, area)

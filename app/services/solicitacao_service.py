@@ -1,38 +1,79 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+
 from app.models.status_usuario import StatusUsuario
-from app.models.usuario import Usuario as User
+
+from app.repositories import user_repository
 
 
 def listar(db: Session):
-    return db.query(User).filter(User.status == StatusUsuario.pendente).all()
+
+    return user_repository.listar_pendentes(db)
 
 
-def aprovar(db: Session, id: int):
-    user = db.get(User, id)
+def aprovar(
+    db: Session,
+    user_id: int
+):
+
+    user = user_repository.buscar_por_id(
+        db,
+        user_id
+    )
 
     if not user:
-        raise HTTPException(404, "Usuário não encontrado")
+        raise HTTPException(
+            status_code=404,
+            detail="Usuário não encontrado"
+        )
 
     if user.status != StatusUsuario.pendente:
-        raise HTTPException(400, "Usuário já processado")
+        raise HTTPException(
+            status_code=400,
+            detail="Usuário já processado"
+        )
 
     user.status = StatusUsuario.aprovado
-    db.commit()
 
-    return {"msg": "Usuário aprovado"}
+    user_repository.salvar(
+        db,
+        user
+    )
+
+    return {
+        "msg": "Usuário aprovado"
+    }
 
 
-def negar(db: Session, id: int):
-    user = db.get(User, id)
+def negar(
+    db: Session,
+    user_id: int
+):
+
+    user = user_repository.buscar_por_id(
+        db,
+        user_id
+    )
 
     if not user:
-        raise HTTPException(404, "Usuário não encontrado")
+        raise HTTPException(
+            status_code=404,
+            detail="Usuário não encontrado"
+        )
 
     if user.status != StatusUsuario.pendente:
-        raise HTTPException(400, "Usuário já processado")
+        raise HTTPException(
+            status_code=400,
+            detail="Usuário já processado"
+        )
 
     user.status = StatusUsuario.negado
-    db.commit()
 
-    return {"msg": "Usuário negado"}
+    user_repository.salvar(
+        db,
+        user
+    )
+
+    return {
+        "msg": "Usuário negado"
+    }

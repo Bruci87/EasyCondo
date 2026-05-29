@@ -29,60 +29,64 @@ async function carregarAreas(){
 
             lista.innerHTML += `
 
-            <tr class="border-b">
+<tr class="
+border-b
+transition
+${
+    ativo
+    ? 'bg-white opacity-100'
+    : 'bg-red-50 opacity-60'
+}">
 
-                <td class="py-4">
+    <td class="py-4">
+        ${area.nome}
+    </td>
 
-                    ${area.nome}
+    <td>
+        ${
+            area.possui_taxa
+            ? "R$ " + area.taxa
+            : "Grátis"
+        }
+    </td>
 
-                </td>
+    <td>
+        S:${area.limite_semanal}
+        /
+        M:${area.limite_mensal}
+    </td>
 
+    <td class="text-right space-x-4">
 
-                <td>
+        <button
+        onclick="preencherFormulario(${area.id})"
+        class="text-blue-600">
 
-                    ${
-                    area.possui_taxa
-                    ? "R$ "+area.taxa
-                    : "Grátis"
-                    }
+            Editar
 
-                </td>
+        </button>
 
+        <button
+        onclick="alternarStatus(${area.id})"
+        class="${
+            ativo
+            ? 'text-red-600'
+            : 'text-green-600'
+        }">
 
-                <td>
+            ${
+                ativo
+                ? 'Desativar'
+                : 'Ativar'
+            }
 
-                    S:${area.limite_semanal}
-                    /
-                    M:${area.limite_mensal}
+        </button>
 
-                </td>
+    </td>
 
+</tr>
 
-                <td class="text-right space-x-4">
-
-                    <button
-                    onclick="preencherFormulario(${area.id})"
-                    class="text-blue-600">
-
-                    Editar
-
-                    </button>
-
-
-                    <button
-                    onclick="alternarStatus(${area.id})"
-                    class="text-red-600">
-
-                    Alterar Status
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-            `;
-
+`;
         });
 
     }
@@ -185,7 +189,9 @@ async(e)=>{
                 limite_cancelamento_edicao_dias.value
             )||0,
 
-        ativo:true
+        ativo: id
+            ? areasCache[id].ativo
+            : true
     };
 
 
