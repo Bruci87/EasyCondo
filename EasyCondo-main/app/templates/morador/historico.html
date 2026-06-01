@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EasyCondo - Histórico de Reservas</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#003fb1",
+                        "primary-container": "#1a56db",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-high": "#e7e8e9",
+                        "on-surface-variant": "#434654",
+                        "outline-variant": "#c3c5d7",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dbe1ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-manrope { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface flex min-h-screen">
+    <aside class="hidden lg:flex flex-col p-4 gap-2 bg-slate-50 dark:bg-slate-950 h-screen w-64 fixed left-0 top-0 z-40">
+        <div class="px-4 py-6 mb-4">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-on-primary">apartment</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-black text-blue-700 dark:text-blue-400 leading-none">Portal</h1>
+                    <p class="text-xs text-slate-500 font-manrope">Residencial</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 flex flex-col gap-1">
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-600 font-manrope text-sm font-semibold hover:bg-slate-200/50 rounded-lg transition-colors" href="#">
+                <span class="material-symbols-outlined">dashboard</span> Home
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-600 font-manrope text-sm font-semibold hover:bg-slate-200/50 rounded-lg transition-colors" href="/morador">
+                <span class="material-symbols-outlined">event_available</span> Reservas
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 bg-white text-blue-700 rounded-lg shadow-sm font-manrope text-sm font-semibold" href="/morador/historico">
+                <span class="material-symbols-outlined">history</span> Histórico
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 lg:ml-64 flex flex-col">
+        <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl h-16 border-b border-slate-100/50">
+            <div class="flex justify-between items-center px-8 h-full w-full max-w-screen-2xl mx-auto">
+                <span class="text-xl font-bold tracking-tighter text-blue-700 font-manrope">EasyCondo</span>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
+                        <img src="https://ui-avatars.com/api/?name=Morador&background=0D8ABC&color=fff" alt="Perfil" />
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="mt-16 p-6 lg:p-10 max-w-screen-xl mx-auto w-full">
+            <div class="mb-8">
+                <h2 class="text-3xl font-extrabold font-manrope tracking-tight text-on-surface">Histórico de Reservas</h2>
+                <p class="text-on-surface-variant">Confira o registro de todos os espaços que você utilizou anteriormente.</p>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/15 flex flex-col w-full">
+                <div class="p-6 border-b border-surface-container-high bg-surface-container-low/30 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">history</span>
+                        <h3 class="text-xl font-bold font-manrope text-on-surface">Minhas Reservas Antigas</h3>
+                    </div>
+                    <span id="contadorHistorico" class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold">
+                        0 Concluídas
+                    </span>
+                </div>
+                
+                <div id="listaHistorico" class="p-6 space-y-3">
+                    <div class="text-center py-8 text-slate-400">
+                        <p class="text-sm">Buscando registros passados...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/historico.js"></script>
+</body>
+</html>
