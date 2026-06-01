@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EasyCondo Sindico Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#00174d",
+                      "outline-variant": "#c3c5d7",
+                      "primary-fixed": "#dbe1ff",
+                      "primary-fixed-dim": "#b5c4ff",
+                      "on-primary-fixed-variant": "#003dab",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#ad3b00",
+                      "tertiary-fixed-dim": "#ffb59a",
+                      "secondary-container": "#b1c2ff",
+                      "on-tertiary-fixed": "#380d00",
+                      "on-secondary-fixed-variant": "#334479",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#ffdbcf",
+                      "on-secondary-fixed": "#01174b",
+                      "secondary-fixed": "#dbe1ff",
+                      "surface-dim": "#d9dadb",
+                      "tertiary": "#852b00",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#b5c4ff",
+                      "surface-tint": "#1353d8",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#802a00",
+                      "on-surface": "#191c1d",
+                      "secondary": "#4b5c92",
+                      "surface-container": "#edeeef",
+                      "on-error-container": "#93000a",
+                      "outline": "#737686",
+                      "on-surface-variant": "#434654",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-variant": "#e1e3e4",
+                      "on-primary-container": "#d4dcff",
+                      "primary": "#003fb1",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container-high": "#e7e8e9",
+                      "background": "#f8f9fa",
+                      "on-secondary-container": "#3d4e84",
+                      "inverse-primary": "#b5c4ff",
+                      "surface-container-low": "#f3f4f5",
+                      "on-tertiary-container": "#ffd4c5",
+                      "error": "#ba1a1a",
+                      "on-background": "#191c1d",
+                      "primary-container": "#1a56db",
+                      "inverse-surface": "#2e3132"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Sidebar Navigation - Hidden on mobile, fixed on desktop -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 bg-slate-50 dark:bg-slate-950 flex-col p-4 space-y-2 z-50">
+<div class="mb-8 px-2">
+<h1 class="text-lg font-black text-blue-700 dark:text-blue-400">EasyCondo</h1>
+<p class="text-xs font-label text-slate-600 dark:text-slate-400">Portal do Sindico</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active State: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 text-blue-700 dark:text-blue-400 font-bold bg-white dark:bg-slate-900 rounded-lg transition-all duration-200 ease-in-out" href="sindico/dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-all duration-200 ease-in-out" href="/sindico/area">
+<span class="material-symbols-outlined" data-icon="handyman">handyman</span>
+<span class="font-label">Áreas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-all duration-200 ease-in-out" href="/sindico/moradores">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label">Moradores</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-all duration-200 ease-in-out" href="/sindico/financeiro">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label">Financeiro</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-outline-variant/15 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label">Suporte</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Bottom Navigation - Only visible on mobile/tablets -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-outline-variant/20 z-50 flex items-center justify-around px-2 py-3">
+<a class="flex flex-col items-center gap-1 text-blue-700 dark:text-blue-400" href="/sindico/dashboard">
+<span class="material-symbols-outlined text-2xl" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-bold">Dash</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="/sindico/moradores">
+<span class="material-symbols-outlined text-2xl" data-icon="groups">groups</span>
+<span class="text-[10px] font-medium">Moradores</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="/sindico/financeiro">
+<span class="material-symbols-outlined text-2xl" data-icon="payments">payments</span>
+<span class="text-[10px] font-medium">Financeiro</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="/sindico/area">
+<span class="material-symbols-outlined text-2xl" data-icon="handyman">handyman</span>
+<span class="text-[10px] font-medium">Áreas</span>
+</a>
+</nav>
+<!-- Main Content Area -->
+<main class="lg:ml-64 min-h-screen pb-24 lg:pb-0">
+<!-- Top Nav Bar -->
+<header class="w-full sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none flex justify-between items-center px-4 md:px-8 py-4">
+<div class="flex items-center gap-4 lg:gap-8">
+<div class="lg:hidden">
+<h1 class="text-base font-black text-blue-700 dark:text-blue-400">EasyCondo</h1>
+</div>
+<h2 class="hidden md:block text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">Dashboard</h2>
+<div class="hidden md:flex gap-6">
+</div>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/40 w-32 md:w-64" placeholder="Search..." type="text"/>
+</div>
+<button class="p-2 rounded-full hover:bg-slate-50 transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="professional portrait of a property manager in a light-filled office environment, soft focused architectural details in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoAP_TSdM72hxrUBhYoi4s0F2qiJ6KY1ig2LC6R1DPo2AxFGErkC2mqb15OYQ4Fa492WZSt-1Tyh68dLBiWOi-nCr8kn5eztI398m4vORZ4gIM5S8u02xnr7u_HKn8OwT0F6HfEpe1T5CGZesaZTtmQab4ALVD1EvCnP8GSeqhS96CCO1w8KMgaSwLpwxUM1bz8SYpQjK1MNWlb9FIzZw8NJ5U1TrkLmUlBij317wNiYdm7JnxTNZOxNdb2jRxrrqPz7gq6MokU_Fu"/>
+</div>
+</div>
+</header>
+<div class="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
+<!-- Hero Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+<!-- Large Card: Active Reservations -->
+<div class="md:col-span-2 bg-gradient-to-br from-primary to-primary-container p-6 rounded-xl text-on-primary shadow-lg flex flex-col justify-between min-h-[160px] md:min-h-[180px]">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-medium opacity-80">Áreas Reservadas</p>
+<h3 class="text-3xl md:text-4xl font-extrabold mt-1">0</h3>
+</div>
+<div class="bg-white/20 p-2 rounded-lg backdrop-blur-md">
+<span class="material-symbols-outlined" data-icon="calendar_month" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+</div>
+<div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
+<span class="bg-white/20 px-2 py-1 rounded-full">+0 no último mês</span>
+<span>8 Pendentes de Confirmação</span>
+</div>
+</div>
+<!-- Metric Card: Total Residents -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Residentes Totais</p>
+<h3 class="text-2xl md:text-3xl font-bold text-on-surface mt-1">0</h3>
+</div>
+<div class="mt-4 flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="text-xs font-bold">0 Novos Nesse Mês</span>
+</div>
+</div>
+<!-- Metric Card: Active Tickets -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Manutenução</p>
+<h3 class="text-2xl md:text-3xl font-bold text-on-surface mt-1">0</h3>
+</div>
+<div class="mt-4 flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+<span class="text-xs font-bold">0 Solicitações Urgentes</span>
+</div>
+</div>
+</section>
+<!-- Main Dashboard Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Resident Approval Section (Left 2/3) -->
+<section class="lg:col-span-2 space-y-4">
+<div class="flex justify-between items-center px-2">
+<h4 class="text-lg font-bold">Aprovação de Residentes</h4>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant/15">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">Residente</th>
+<th class="hidden sm:table-cell px-6 py-4 font-semibold">Unidade</th>
+<th class="px-6 py-4 font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- Quick Actions Card -->
+<div class="bg-surface-container-low p-5 rounded-xl space-y-3">
+<p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">Ações Rápidas</p>
+<href="sindico/area"></href>
+   class="w-full flex items-center justify-between p-3 bg-surface-container-lowest rounded-lg hover:bg-white transition-all text-sm font-semibold group">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="add_location">add_location</span>
+                                Registrar Área
+                            </span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+</div>
+</div>
+<!-- Floating Action Button - Only for Dashboard context -->
+
+</main>
+
+</body>
+
+</html>
+
+<script>
+async function carregarDashboard() {
+  try {
+    const [resDashboard, resPendentes] = await Promise.all([
+      fetch("/api/dashboard"),
+      fetch("/solicitacoes/")
+    ]);
+
+    const dashboard = await resDashboard.json();
+    const pendentes = await resPendentes.json();
+
+    // KPIs (ainda está fake aqui porque não veio do backend)
+document.querySelectorAll("h3")[0].innerText = dashboard.reservas_ativas;
+document.querySelectorAll("h3")[1].innerText = dashboard.total_residentes;
+document.querySelectorAll("h3")[2].innerText = dashboard.manutencoes;
+
+    // tabela
+    const tbody = document.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    pendentes.forEach(user => {
+      tbody.innerHTML += `
+        <tr>
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div>
+                <p class="text-sm font-bold">${user.nome}</p>
+                <p class="text-xs text-gray-500">${user.email}</p>
+              </div>
+            </div>
+          </td>
+
+          <td class="px-6 py-4 text-sm font-medium">
+            ${user.apartamento ?? "-"}
+          </td>
+
+          <td class="px-6 py-4 text-right space-x-2">
+            <button onclick="negar('${user.id}')"
+              class="bg-red-200 px-3 py-1 rounded">
+              Rejeitar
+            </button>
+
+            <button onclick="aprovar('${user.id}')"
+              class="bg-blue-600 text-white px-3 py-1 rounded">
+              Aprovar
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+  } catch (err) {
+    console.error("Erro dashboard:", err);
+  }
+}
+
+async function aprovar(id) {
+  await fetch(`/solicitacoes/${id}/aprovar`, {
+    method: "PUT"
+  });
+  carregarDashboard();
+}
+
+async function negar(id) {
+  await fetch(`/solicitacoes/${id}/negar`, {
+    method: "PUT"
+  });
+  carregarDashboard();
+}
+
+document.addEventListener("DOMContentLoaded", carregarDashboard);
+</script>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#00174d",
+                    "outline-variant": "#c3c5d7",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-fixed-dim": "#b5c4ff",
+                    "on-primary-fixed-variant": "#003dab",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#ad3b00",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "secondary-container": "#b1c2ff",
+                    "on-tertiary-fixed": "#380d00",
+                    "on-secondary-fixed-variant": "#334479",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbcf",
+                    "on-secondary-fixed": "#01174b",
+                    "secondary-fixed": "#dbe1ff",
+                    "surface-dim": "#d9dadb",
+                    "tertiary": "#852b00",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#b5c4ff",
+                    "surface-tint": "#1353d8",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface": "#f8f9fa",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#802a00",
+                    "on-surface": "#191c1d",
+                    "secondary": "#4b5c92",
+                    "surface-container": "#edeeef",
+                    "on-error-container": "#93000a",
+                    "outline": "#737686",
+                    "on-surface-variant": "#434654",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-variant": "#e1e3e4",
+                    "on-primary-container": "#d4dcff",
+                    "primary": "#003fb1",
+                    "surface-bright": "#f8f9fa",
+                    "surface-container-high": "#e7e8e9",
+                    "background": "#f8f9fa",
+                    "on-secondary-container": "#3d4e84",
+                    "inverse-primary": "#b5c4ff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-container": "#ffd4c5",
+                    "error": "#ba1a1a",
+                    "on-background": "#191c1d",
+                    "primary-container": "#1a56db",
+                    "inverse-surface": "#2e3132"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .whisper-shadow {
+            box-shadow: 0 12px 40px rgba(25, 28, 29, 0.05);
+        }
+        .ghost-border {
+            outline: 1px solid rgba(0, 63, 177, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<div class="min-h-screen flex flex-col md:flex-row overflow-hidden">
+<div class="hidden md:flex md:w-1/2 lg:w-3/5 relative bg-primary-container items-center justify-center p-12 overflow-hidden">
+<div class="absolute inset-0 opacity-40">
+<img alt="Modern apartment building architecture" class="w-full h-full object-cover" data-alt="luxury modern apartment building facade with clean lines large glass windows and minimalist architectural design during blue hour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCWDhHrAJMIzku5UPV8ew7viv0i2uH_CGpNPm2B7QAcLeoiJghLCf8Nm0WiVqGCozFc9TadiEjyE6VbaxTDaw3ulFV9KDi_s9bVe5eEGwVxmtvya_dZk2wSnay6rPSD9dRNPjpaY4d0Ux9ALMs4UHvMBM6DxLCcOn1xEyQw26hx3pXPFpeoP2Gh5TtNpdJxK4SQ54y7QIFtOeLwjV7rKWBGGYjmBn1Q5THN_2QSwfCxLFDTwyaS9GIThjfIxiJjQo53MUI3kaWsqwS"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary to-transparent opacity-60"></div>
+<div class="relative z-10 max-w-lg">
+<div class="mb-8">
+<span class="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-xl text-white mb-6">
+<span class="material-symbols-outlined text-4xl" data-icon="domain">domain</span>
+</span>
+<h1 class="text-5xl font-extrabold font-headline text-white tracking-tight leading-tight">
+                        Experimente o estilo de vida premium <br/>em condomínio.
+                    </h1>
+<p class="mt-6 text-xl text-primary-fixed leading-relaxed">
+                        Junte-se à comunidade onde a gestão encontra a elegância moderna. Seu concierge digital está a apenas um passo de distância.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-6 mt-12">
+<div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+<div class="text-white font-bold text-2xl">24/7</div>
+<div class="text-primary-fixed-dim text-sm">Acesso ao concierge</div>
+</div>
+<div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+<div class="text-white font-bold text-2xl">100%</div>
+<div class="text-primary-fixed-dim text-sm">Solicitações Digitais</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 lg:w-2/5 flex flex-col justify-center items-center p-6 sm:p-12 md:p-16 bg-surface overflow-y-auto">
+<div class="w-full max-w-md">
+<div class="mb-10 text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-2 mb-8">
+<span class="text-primary text-2xl font-black font-headline tracking-tighter">EasyCondo</span>
+</div>
+<h2 class="text-3xl font-extrabold font-headline text-on-surface tracking-tight">Criar Conta</h2>
+<p class="mt-2 text-on-surface-variant font-medium">Junte-se ao ecossistema digital do seu edifício.</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl mb-8 flex gap-4 items-start border-l-4 border-tertiary">
+<span class="material-symbols-outlined text-tertiary mt-1" data-icon="info">info</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Verificação necessária</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Por motivos de segurança, todas as novas contas de residentes devem ser aprovadas manualmente pelo administrador do prédio antes de receberem acesso.</p>
+</div>
+</div>
+<div id="errorBox" style="display:none;margin-bottom:10px;padding:10px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;"></div>
+<div id="successBox" style="display:none;margin-bottom:10px;padding:10px;border:1px solid #badbcc;background:#d1e7dd;color:#0f5132;border-radius:8px;"></div>
+<form class="space-y-5" id="registerForm">
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2 ml-1" for="nome">NOME COMPLETO</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3.5 text-on-surface focus:ring-0 focus:bg-surface-container-lowest transition-all ghost-border placeholder:text-outline-variant" id="nome" placeholder="Maria José" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2 ml-1" for="unit">APARTAMENTO / NÚMERO DA UNIDADE</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3.5 text-on-surface focus:ring-0 focus:bg-surface-container-lowest transition-all ghost-border placeholder:text-outline-variant" id="unit" placeholder="Tower B, Apt 402" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2 ml-1" for="email">ENDEREÇO DE EMAIL</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3.5 text-on-surface focus:ring-0 focus:bg-surface-container-lowest transition-all ghost-border placeholder:text-outline-variant" id="email" placeholder="nome@exemplo.com" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2 ml-1" for="senha">SENHA</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3.5 text-on-surface focus:ring-0 focus:bg-surface-container-lowest transition-all ghost-border placeholder:text-outline-variant" id="senha" placeholder="••••••••" type="password"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-wider text-outline mb-2 ml-1" for="confirm">CONFIRMAR SENHA</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3.5 text-on-surface focus:ring-0 focus:bg-surface-container-lowest transition-all ghost-border placeholder:text-outline-variant" id="confirm" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-lg whisper-shadow active:scale-95 transition-all flex items-center justify-center gap-2" type="submit">
+<span>Requisitar Registro</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<div class="mt-10 text-center">
+<p class="text-on-surface-variant text-sm">
+                        Já tem uma conta? 
+                        <a class="text-primary font-bold hover:underline ml-1" href="/auth/login">Entrar</a>
+</p>
+</div>
+<div class="mt-12 flex items-center justify-center gap-8 grayscale opacity-40">
+<span class="material-symbols-outlined text-3xl" data-icon="verified_user">verified_user</span>
+<span class="material-symbols-outlined text-3xl" data-icon="lock">lock</span>
+<span class="material-symbols-outlined text-3xl" data-icon="gpp_good">gpp_good</span>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    const confirm = document.getElementById("confirm").value;
+    const apartamento = document.getElementById("unit").value;
+
+    if (!nome || !email || !senha || !confirm || !apartamento) {
+    showError("Preencha todos os campos.");
+    return;
+}
+
+if (senha.length < 6) {
+    showError("A senha deve ter pelo menos 6 caracteres.");
+    return;
+}
+
+if (senha !== confirm) {
+    showError("As senhas não coincidem.");
+    return;
+}
+
+    const response = await fetch("/auth/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nome,
+            email,
+            senha,
+            confirmar_senha: confirm,
+            apartamento
+        })
+    });
+
+    if (response.ok) {
+        window.location.href = "/auth/login";
+    } else {
+    const data = await response.json().catch(() => null);
+    
+    if (data?.detail === "EMAIL_EXISTS") {
+        showError("Este email já está cadastrado.");
+    } 
+    else if (data?.detail === "MISSING_FIELDS") {
+        showError("Preencha todos os campos.");
+    } else if (senha.length < 6) {
+    showError("A senha deve ter pelo menos 6 caracteres.");
+    } else if(senha !== confirm) {
+    showError("As senhas não coincidem.");
+    } else {
+        showError("Erro ao cadastrar.");
+    }
+}
+});
+
+function showError(msg){
+    const box = document.getElementById("errorBox");
+    const ok = document.getElementById("successBox");
+
+    ok.style.display = "none";
+    box.style.display = "block";
+    box.innerText = msg;
+}
+
+function showSuccess(msg){
+    const box = document.getElementById("successBox");
+    const err = document.getElementById("errorBox");
+
+    err.style.display = "none";
+    box.style.display = "block";
+    box.innerText = msg;
+}
+
+</script>
+
+</body></html>
+
