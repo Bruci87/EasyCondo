@@ -17,9 +17,19 @@ def criar(data: ReservaCreate, db: Session = Depends(get_db)):
 def listar_do_morador(morador_id: int, db: Session = Depends(get_db)):
     return reserva_service.listar_reservas_por_morador(db, morador_id)
 
+
+@router.get("/condominio/ativas", response_model=List[ReservaResponse])
+def listar_ativas_do_condominio(db: Session = Depends(get_db)):
+    return reserva_service.listar_todas_reservas_ativas_do_condominio(db)
+
 @router.put("/{reserva_id}", response_model=ReservaResponse)
 def atualizar(reserva_id: int, data: ReservaCreate, db: Session = Depends(get_db)):
     reserva = reserva_service.atualizar_reserva(db, reserva_id, data)
     if not reserva:
         raise HTTPException(status_code=404, detail="Reserva não encontrada")
     return reserva
+
+
+@router.post("/{reserva_id}/paguei", response_model=ReservaResponse)
+def confirmar_pagamento(reserva_id: int, db: Session = Depends(get_db)):
+    return reserva_service.confirmar_pagamento_reserva(db, reserva_id)

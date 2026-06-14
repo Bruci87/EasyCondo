@@ -101,6 +101,10 @@
                                     <option value="">Carregando áreas...</option>
                                 </select>
                             </div>
+                            <button type="button" id="btnAbrirDisponibilidade" class="w-full flex items-center justify-center gap-2 rounded-lg border border-primary/15 bg-primary/5 px-4 py-3 text-sm font-bold text-primary transition-colors hover:bg-primary/10">
+                                <span class="material-symbols-outlined text-base">event_available</span>
+                                Escolher dia e horário
+                            </button>
                             <div>
                                 <label class="block text-sm font-semibold text-on-surface-variant mb-1.5 ml-1">Data</label>
                                 <input id="data" class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary/40 font-body" type="date" required />
@@ -148,6 +152,45 @@
                 </section>
             </div>
         </main>
+    </div>
+
+    <div id="modalDisponibilidade" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 px-4 py-6 backdrop-blur-sm">
+        <div class="w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl border border-outline-variant/15">
+            <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+                <div>
+                    <h3 class="text-xl font-bold font-manrope text-on-surface">Selecionar disponibilidade</h3>
+                    <p class="text-sm text-on-surface-variant">Escolha um dia livre e depois o horário disponível.</p>
+                </div>
+                <button type="button" onclick="fecharModalDisponibilidade()" class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="grid gap-0 lg:grid-cols-[300px_1fr]">
+                <div class="border-b border-slate-100 bg-surface-container-low/40 p-5 lg:border-b-0 lg:border-r">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant">Dias disponíveis</p>
+                            <p id="textoAreaModal" class="text-sm font-semibold text-on-surface"></p>
+                        </div>
+                        <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">Próximos 30 dias</span>
+                    </div>
+                    <div id="listaDiasDisponiveis" class="max-h-[420px] space-y-2 overflow-y-auto pr-1"></div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant">Horários disponíveis</p>
+                            <h4 id="textoDiaSelecionado" class="text-lg font-bold text-on-surface">Selecione um dia</h4>
+                        </div>
+                        <div id="contadorHorariosDisponiveis" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">0 horários</div>
+                    </div>
+
+                    <div id="listaHorariosDisponiveis" class="mt-4 grid max-h-[420px] grid-cols-2 gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/static/js/morador.js"></script>
