@@ -57,6 +57,50 @@ function normalizarData(data) {
     return String(data).split("T")[0];
 }
 
+function obterAreaDaReserva(reserva) {
+    return areasCache[reserva.area_id] || null;
+}
+
+function obterDiasParaReserva(dataReserva) {
+    if (!dataReserva) return Number.NEGATIVE_INFINITY;
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const data = new Date(`${normalizarData(dataReserva)}T00:00:00`);
+    data.setHours(0, 0, 0, 0);
+
+    return Math.floor((data.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function reservaDentroDoPrazoEdicaoECancelamento(reserva, area) {
+    if (!reserva || !area) return false;
+
+    return obterDiasParaReserva(reserva.data_reserva) >= Number(area.limite_cancelamento_edicao_dias || 0);
+}
+
+function reservaPodeSerEditada(reserva, area) {
+    if (!reserva || !area) return false;
+
+    const statusNormalizado = String(reserva.status || "").toUpperCase();
+    if (statusNormalizado === "CANCELADA") return false;
+
+    if (area.possui_taxa === true || area.possui_taxa === 1) {
+        if (statusNormalizado === "CONFIRMADA") return false;
+    }
+
+    return reservaDentroDoPrazoEdicaoECancelamento(reserva, area);
+}
+
+function reservaPodeSerCancelada(reserva, area) {
+    if (!reserva || !area) return false;
+
+    const statusNormalizado = String(reserva.status || "").toUpperCase();
+    if (statusNormalizado === "CANCELADA") return false;
+
+    return reservaDentroDoPrazoEdicaoECancelamento(reserva, area);
+}
+
 function converterHoraParaMinutos(hora) {
     if (!hora) return 0;
 
@@ -187,6 +231,68 @@ function gerarDiasDisponiveis(areaId, reservaEditandoId = "") {
     }
 
     return dias;
+}
+
+function iniciarEdicaoReserva(reservaId) {
+    const reserva = reservasCache[reservaId];
+    if (!reserva) return;
+
+    const area = obterAreaDaReserva(reserva);
+    if (!reservaPodeSerEditada(reserva, area)) {
+        showToast("Esta reserva não pode mais ser editada.", "error");
+        return;
+    }
+
+    const campoArea = document.getElementById("area");
+    const campoData = document.getElementById("data");
+    const campoInicio = document.getElementById("inicio");
+    const campoFim = document.getElementById("fim");
+    const campoReservaId = document.getElementById("reserva_id");
+    const botaoSalvar = document.getElementById("btnSalvar");
+    const tituloFormulario = document.querySelector("section .bg-surface-container-lowest h3");
+
+    if (campoArea) campoArea.value = String(reserva.area_id);
+    if (campoData) campoData.value = normalizarData(reserva.data_reserva);
+    if (campoInicio) campoInicio.value = String(reserva.horario_inicio).substring(0, 5);
+    if (campoFim) campoFim.value = String(reserva.horario_fim).substring(0, 5);
+    if (campoReservaId) campoReservaId.value = String(reserva.id);
+    if (botaoSalvar) botaoSalvar.innerText = "Salvar Alterações";
+    if (tituloFormulario) tituloFormulario.innerText = "Editar Reserva";
+
+    atualizarBotaoDisponibilidade();
+    atualizarTextoAreaModal();
+    showToast("Reserva carregada para edição.", "success");
+
+    const form = document.getElementById("reservaForm");
+    if (form) {
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+function confirmarCancelamentoReserva(reservaId) {
+    return confirm("Deseja cancelar esta reserva?");
+}
+
+async function cancelarReserva(reservaId) {
+    if (!confirmarCancelamentoReserva(reservaId)) return;
+
+    try {
+        const res = await fetch(`/api/reserva/${reservaId}/cancelar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (res.ok) {
+            showToast("Reserva cancelada com sucesso!", "success");
+            cancelarEdicao();
+            await carregarMinhasReservas();
+        } else {
+            const erro = await res.json();
+            showToast(erro.detail || "Erro ao cancelar reserva.", "error");
+        }
+    } catch {
+        showToast("Erro de conexão.", "error");
+    }
 }
 
 function renderizarHorariosDoDia(dia) {
@@ -331,14 +437,21 @@ async function carregarMinhasReservas() {
 
         container.innerHTML = "";
         reservasCache = {};
+        const contadorReservas = document.getElementById("contadorReservas");
+
+        if (contadorReservas) {
+            contadorReservas.innerText = `${reservas.length} Agendadas`;
+        }
 
         reservas.forEach((reserva) => {
             reservasCache[reserva.id] = reserva;
 
-            const areaAtual = areasCache[reserva.area_id];
+            const areaAtual = obterAreaDaReserva(reserva);
             const possuiTaxa = areaAtual && (areaAtual.possui_taxa === true || areaAtual.possui_taxa === 1);
             const taxaExibida = possuiTaxa ? formatarMoeda(areaAtual.taxa) : null;
             const statusNormalizado = String(reserva.status || "").toUpperCase();
+            const podeEditar = reservaPodeSerEditada(reserva, areaAtual);
+            const podeCancelar = reservaPodeSerCancelada(reserva, areaAtual);
 
             let statusColor = "bg-green-100 text-green-800";
             if (statusNormalizado === "PENDENTE_PAGAMENTO") statusColor = "bg-amber-100 text-amber-800";
@@ -355,14 +468,14 @@ async function carregarMinhasReservas() {
                             ${reserva.status}
                         </span>
                     </div>
-                    ${statusNormalizado === "PENDENTE_PAGAMENTO"
-                        ? `<div class="flex justify-end pt-2 border-t border-slate-100 mt-1">
-                                <button onclick="confirmarPagamentoReserva('${reserva.id}')" class="px-4 py-2 bg-primary text-white font-bold rounded-lg text-xs hover:opacity-90 transition-all">
-                                    Paguei
-                                </button>
-                           </div>`
-                        : ""
-                    }
+                    <div class="flex flex-wrap justify-end gap-2 pt-2 border-t border-slate-100 mt-1">
+                        ${podeEditar ? `<button onclick="iniciarEdicaoReserva('${reserva.id}')" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs hover:bg-slate-300 transition-all">Editar</button>` : ""}
+                        ${podeCancelar ? `<button onclick="cancelarReserva('${reserva.id}')" class="px-4 py-2 bg-red-50 text-red-700 font-bold rounded-lg text-xs hover:bg-red-100 transition-all">Cancelar</button>` : ""}
+                        ${statusNormalizado === "PENDENTE_PAGAMENTO"
+                            ? `<button onclick="confirmarPagamentoReserva('${reserva.id}')" class="px-4 py-2 bg-primary text-white font-bold rounded-lg text-xs hover:opacity-90 transition-all">Paguei</button>`
+                            : ""
+                        }
+                    </div>
                 </div>
             `;
         });
@@ -381,6 +494,12 @@ function cancelarEdicao() {
 
     const inputReservaId = document.getElementById("reserva_id");
     if (inputReservaId) inputReservaId.value = "";
+
+    const botaoSalvar = document.getElementById("btnSalvar");
+    if (botaoSalvar) botaoSalvar.innerText = "Confirmar Reserva";
+
+    const tituloFormulario = document.querySelector("section .bg-surface-container-lowest h3");
+    if (tituloFormulario) tituloFormulario.innerText = "Fazer Reserva";
 
     fecharModalDisponibilidade();
     atualizarBotaoDisponibilidade();

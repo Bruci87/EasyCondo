@@ -30,6 +30,11 @@ def atualizar(reserva_id: int, data: ReservaCreate, db: Session = Depends(get_db
     return reserva
 
 
+@router.post("/{reserva_id}/cancelar", response_model=ReservaResponse)
+def cancelar(reserva_id: int, db: Session = Depends(get_db)):
+    return reserva_service.cancelar_reserva(db, reserva_id)
+
+
 @router.post("/{reserva_id}/paguei", response_model=ReservaResponse)
 def confirmar_pagamento(reserva_id: int, db: Session = Depends(get_db)):
     return reserva_service.confirmar_pagamento_reserva(db, reserva_id)

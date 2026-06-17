@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -62,6 +64,49 @@ def _aplicar_regra_taxa(reserva: Reserva, area) -> None:
         reserva.valor_pago = 0.0
 
 
+def _validar_prazo_cancelamento_edicao(reserva: Reserva, area, acao: str) -> None:
+    dias_limite = int(area.limite_cancelamento_edicao_dias or 0)
+    dias_para_reserva = (reserva.data_reserva - date.today()).days
+
+    if dias_para_reserva < 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Não é possível {acao} uma reserva com data passada."
+        )
+
+    if dias_limite > 0 and dias_para_reserva < dias_limite:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Não é possível {acao} esta reserva com menos de {dias_limite} dia(s) de antecedência."
+        )
+
+
+def _validar_edicao_reserva(reserva: Reserva, area) -> None:
+    if reserva.status == StatusReserva.cancelada:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível editar uma reserva cancelada."
+        )
+
+    if area.possui_taxa and reserva.status == StatusReserva.confirmada:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Reservas pagas não podem ser editadas."
+        )
+
+    _validar_prazo_cancelamento_edicao(reserva, area, "editar")
+
+
+def _validar_cancelamento_reserva(reserva: Reserva, area) -> None:
+    if reserva.status == StatusReserva.cancelada:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Esta reserva já está cancelada."
+        )
+
+    _validar_prazo_cancelamento_edicao(reserva, area, "cancelar")
+
+
 def criar_reserva(
     db: Session,
     reserva_data: ReservaCreate
@@ -124,6 +169,9 @@ def atualizar_reserva(
     if not reserva:
         return None
 
+    area_atual = _buscar_area_ou_404(db, reserva.area_id)
+    _validar_edicao_reserva(reserva, area_atual)
+
     _validar_intervalo_horario(
         reserva_data.horario_inicio,
         reserva_data.horario_fim
@@ -147,6 +195,33 @@ def atualizar_reserva(
     reserva.horario_inicio = reserva_data.horario_inicio
     reserva.horario_fim = reserva_data.horario_fim
     _aplicar_regra_taxa(reserva, area)
+
+    return reserva_repository.salvar(
+        db,
+        reserva
+    )
+
+
+def cancelar_reserva(
+    db: Session,
+    reserva_id: int
+):
+    reserva = reserva_repository.buscar_por_id(
+        db,
+        reserva_id
+    )
+
+    if not reserva:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Reserva não encontrada"
+        )
+
+    area = _buscar_area_ou_404(db, reserva.area_id)
+    _validar_cancelamento_reserva(reserva, area)
+
+    reserva.status = StatusReserva.cancelada
+    reserva.data_cancelamento = date.today()
 
     return reserva_repository.salvar(
         db,
