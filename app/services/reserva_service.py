@@ -109,8 +109,15 @@ def _validar_cancelamento_reserva(reserva: Reserva, area) -> None:
 
 def criar_reserva(
     db: Session,
-    reserva_data: ReservaCreate
+    reserva_data: ReservaCreate,
+    user_id: int
 ):
+
+    if reserva_data.morador_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você só pode criar reservas para o seu usuário."
+        )
 
     _validar_intervalo_horario(
         reserva_data.horario_inicio,
@@ -158,7 +165,8 @@ def listar_todas_reservas_ativas_do_condominio(
 def atualizar_reserva(
     db: Session,
     reserva_id: int,
-    reserva_data: ReservaCreate
+    reserva_data: ReservaCreate,
+    user_id: int
 ):
 
     reserva = reserva_repository.buscar_por_id(
@@ -168,6 +176,12 @@ def atualizar_reserva(
 
     if not reserva:
         return None
+
+    if reserva.morador_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você não pode editar reserva de outro morador."
+        )
 
     area_atual = _buscar_area_ou_404(db, reserva.area_id)
     _validar_edicao_reserva(reserva, area_atual)
@@ -204,7 +218,8 @@ def atualizar_reserva(
 
 def cancelar_reserva(
     db: Session,
-    reserva_id: int
+    reserva_id: int,
+    user_id: int
 ):
     reserva = reserva_repository.buscar_por_id(
         db,
@@ -215,6 +230,12 @@ def cancelar_reserva(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Reserva não encontrada"
+        )
+
+    if reserva.morador_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você não pode cancelar reserva de outro morador."
         )
 
     area = _buscar_area_ou_404(db, reserva.area_id)
@@ -231,7 +252,8 @@ def cancelar_reserva(
 
 def confirmar_pagamento_reserva(
     db: Session,
-    reserva_id: int
+    reserva_id: int,
+    user_id: int
 ):
     reserva = reserva_repository.buscar_por_id(
         db,
@@ -242,6 +264,12 @@ def confirmar_pagamento_reserva(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Reserva não encontrada"
+        )
+
+    if reserva.morador_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você não pode confirmar pagamento de reserva de outro morador."
         )
 
     if reserva.status != StatusReserva.pendentePagamento:

@@ -27,4 +27,13 @@ def register_page(request: Request):
         name="auth/register.html",
         context={}
     )
+
+
+@router.get("/sindico/login")
+def sindico_login_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="auth/sindico_login.html",
+        context={}
+    )
     

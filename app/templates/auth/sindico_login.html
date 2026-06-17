@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EasyCondo - Login do Síndico</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900 flex items-center justify-center p-6">
+    <div class="w-full max-w-md rounded-2xl bg-white shadow-xl border border-slate-200 p-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700 mb-2">Portal do Síndico</p>
+        <h1 class="text-3xl font-extrabold mb-1">EasyCondo</h1>
+        <p class="text-sm text-slate-500 mb-6">Entre com as credenciais de síndico para acessar o dashboard administrativo.</p>
+
+        <form id="sindicoLoginForm" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-semibold text-slate-600 mb-1">Email</label>
+                <input id="email" type="email" required class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="sindico@condominio.com" />
+            </div>
+            <div>
+                <label for="senha" class="block text-sm font-semibold text-slate-600 mb-1">Senha</label>
+                <input id="senha" type="password" required class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="********" />
+            </div>
+
+            <div id="errorBox" class="hidden rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"></div>
+
+            <button type="submit" class="w-full rounded-xl bg-blue-700 text-white font-bold py-3 hover:bg-blue-800 transition-colors">Entrar como síndico</button>
+        </form>
+
+        <a href="/auth/login" class="mt-4 inline-flex text-sm font-semibold text-slate-600 hover:text-blue-700 transition-colors">Voltar para login de morador</a>
+    </div>
+
+    <script>
+    document.getElementById("sindicoLoginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+
+        const response = await fetch("/auth/sindico/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, senha })
+        });
+
+        if (response.ok) {
+            window.location.href = "/sindico/dashboard";
+            return;
+        }
+
+        const data = await response.json().catch(() => null);
+        const box = document.getElementById("errorBox");
+        box.classList.remove("hidden");
+
+        if (data?.detail === "USER_NOT_SINDICO") {
+            box.innerText = "Este usuário não possui permissão de síndico.";
+        } else if (data?.detail === "USER_NOT_APPROVED") {
+            box.innerText = "Usuário ainda não aprovado.";
+        } else if (data?.detail === "EMAIL_NOT_FOUND") {
+            box.innerText = "Email não encontrado.";
+        } else if (data?.detail === "INVALID_PASSWORD") {
+            box.innerText = "Senha inválida.";
+        } else {
+            box.innerText = "Erro ao realizar login do síndico.";
+        }
+    });
+    </script>
+</body>
+</html>

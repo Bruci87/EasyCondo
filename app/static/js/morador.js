@@ -27,10 +27,10 @@ function showToast(message, type = "success") {
 // ==========================================
 // LÓGICA DA APLICAÇÃO
 // ==========================================
-const MORADOR_ID_SIMULADO = 1;
 const HORARIO_INICIAL_MINUTOS = 6 * 60;
 const HORARIO_FINAL_MINUTOS = 23 * 60 + 30;
 const PASSO_MINUTOS = 30;
+let usuarioLogadoId = null;
 
 let areasCache = {};
 let reservasCache = {};
@@ -429,7 +429,7 @@ async function carregarMinhasReservas() {
     try {
         await buscarReservasCondominio();
 
-        const res = await fetch(`/api/reserva/morador/${MORADOR_ID_SIMULADO}`);
+        const res = await fetch("/api/reserva/minhas");
         const reservas = await res.json();
         const container = document.getElementById("listaReservas");
 
@@ -537,6 +537,12 @@ if (form) {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        if (!usuarioLogadoId) {
+            showToast("Sessão expirada. Faça login novamente.", "error");
+            window.location.href = "/auth/login";
+            return;
+        }
+
         const areaId = document.getElementById("area").value;
         const dataReserva = document.getElementById("data").value;
         const inicio = document.getElementById("inicio").value;
@@ -575,7 +581,7 @@ if (form) {
 
         const data = {
             area_id: parseInt(areaId, 10),
-            morador_id: MORADOR_ID_SIMULADO,
+            morador_id: usuarioLogadoId,
             data_reserva: dataReserva,
             horario_inicio: inicio.length === 5 ? `${inicio}:00` : inicio,
             horario_fim: fim.length === 5 ? `${fim}:00` : fim,
@@ -633,8 +639,36 @@ async function confirmarPagamentoReserva(id) {
     }
 }
 
+async function carregarSessaoMorador() {
+    try {
+        const response = await fetch("/auth/me");
+        const session = await response.json();
+
+        if (!session.authenticated) {
+            window.location.href = "/auth/login";
+            return false;
+        }
+
+        if (session.is_sindico) {
+            window.location.href = "/sindico/dashboard";
+            return false;
+        }
+
+        usuarioLogadoId = session.user_id;
+        return true;
+    } catch {
+        showToast("Não foi possível validar sua sessão.", "error");
+        return false;
+    }
+}
+
 // ==========================================
 // INIT
 // ==========================================
 atualizarBotaoDisponibilidade();
-carregarAreasNoSelect();
+
+(async () => {
+    const sessaoValida = await carregarSessaoMorador();
+    if (!sessaoValida) return;
+    carregarAreasNoSelect();
+})();

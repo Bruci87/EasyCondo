@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.models.usuario import Usuario
+from app.models.sindico import Sindico
 from app.models.status_usuario import StatusUsuario
 
 from app.repositories import user_repository
@@ -94,7 +95,31 @@ def login(
             detail="USER_NOT_APPROVED"
         )
 
+    is_sindico = (
+        db.query(Sindico)
+        .filter(Sindico.id == user.id)
+        .first()
+        is not None
+    )
+
     return {
         "msg": "Login realizado",
-        "user_id": user.id
+        "user_id": user.id,
+        "is_sindico": is_sindico
     }
+
+
+def login_sindico(
+    db: Session,
+    email: str,
+    senha: str
+):
+    resultado = login(db, email, senha)
+
+    if not resultado["is_sindico"]:
+        raise HTTPException(
+            status_code=403,
+            detail="USER_NOT_SINDICO"
+        )
+
+    return resultado

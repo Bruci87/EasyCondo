@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EasyCondo - Reservas</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet" />
+<style>
+body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
+</head>
+<body>
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 bg-slate-50 border-r flex-col p-4 space-y-2 z-50">
+    <div class="mb-8 px-2">
+        <h1 class="text-lg font-black text-blue-700">EasyCondo</h1>
+        <p class="text-xs text-slate-500">Portal do Síndico</p>
+    </div>
+
+    <nav class="flex-1 space-y-1">
+        <a href="/sindico/dashboard" class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-blue-600">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+        </a>
+        <a href="/sindico/area" class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-blue-600">
+            <span class="material-symbols-outlined">handyman</span>
+            Áreas
+        </a>
+        <a href="/sindico/reservas" class="flex items-center gap-3 px-3 py-2 bg-white text-blue-700 font-bold rounded-lg">
+            <span class="material-symbols-outlined">event_available</span>
+            Reservas
+        </a>
+        <a href="/sindico/moradores" class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:text-blue-600">
+            <span class="material-symbols-outlined">groups</span>
+            Moradores
+        </a>
+    </nav>
+</aside>
+
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 z-50">
+    <a href="/sindico/dashboard" class="flex flex-col items-center text-slate-500">
+        <span class="material-symbols-outlined text-2xl">dashboard</span>
+        <span class="text-[10px]">Dash</span>
+    </a>
+    <a href="/sindico/area" class="flex flex-col items-center text-slate-500">
+        <span class="material-symbols-outlined text-2xl">handyman</span>
+        <span class="text-[10px]">Áreas</span>
+    </a>
+    <a href="/sindico/reservas" class="flex flex-col items-center text-blue-700">
+        <span class="material-symbols-outlined text-2xl">event_available</span>
+        <span class="text-[10px] font-bold">Reservas</span>
+    </a>
+</nav>
+
+<main class="lg:ml-64 p-6 pb-24 lg:pb-6">
+    <header class="mb-6">
+        <h2 class="text-3xl font-extrabold text-slate-900">Reservas do Condomínio</h2>
+        <p class="text-sm text-slate-500">Visualização consolidada das reservas ativas.</p>
+    </header>
+
+    <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wide">
+                    <tr>
+                        <th class="px-4 py-3">ID</th>
+                        <th class="px-4 py-3">Área</th>
+                        <th class="px-4 py-3">Morador</th>
+                        <th class="px-4 py-3">Data</th>
+                        <th class="px-4 py-3">Horário</th>
+                        <th class="px-4 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="listaReservas" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script>
+async function carregarReservas() {
+    try {
+        const res = await fetch('/api/reserva/condominio/ativas');
+        const reservas = await res.json();
+        const tbody = document.getElementById('listaReservas');
+
+        tbody.innerHTML = '';
+
+        reservas.forEach((reserva) => {
+            const data = String(reserva.data_reserva || '').split('T')[0] || '-';
+            const inicio = String(reserva.horario_inicio || '').slice(0, 5);
+            const fim = String(reserva.horario_fim || '').slice(0, 5);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="px-4 py-3 text-sm font-semibold text-slate-700">${reserva.id}</td>
+                    <td class="px-4 py-3 text-sm">${reserva.area_id}</td>
+                    <td class="px-4 py-3 text-sm">${reserva.morador_id}</td>
+                    <td class="px-4 py-3 text-sm">${data}</td>
+                    <td class="px-4 py-3 text-sm">${inicio} - ${fim}</td>
+                    <td class="px-4 py-3 text-sm font-semibold">${reserva.status}</td>
+                </tr>
+            `;
+        });
+
+        if (reservas.length === 0) {
+            tbody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500" colspan="6">Nenhuma reserva ativa encontrada.</td></tr>';
+        }
+    } catch (error) {
+        const tbody = document.getElementById('listaReservas');
+        tbody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-red-600" colspan="6">Erro ao carregar reservas.</td></tr>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', carregarReservas);
+</script>
+</body>
+</html>

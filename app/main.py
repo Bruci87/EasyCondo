@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 import os
 
 from app.api.routes import auth, solicitacao, area, reserva, dashboard
@@ -12,6 +13,11 @@ from app.api.pages import (
 from app.db.session import engine, Base
 
 app = FastAPI()
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.getenv("EASYCONDO_SESSION_SECRET", "easycondo-dev-secret")
+)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

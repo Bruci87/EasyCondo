@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from app.db.session import SessionLocal
 from app.models.usuario import Usuario
 from app.models.reserva import Reserva
+from app.models.status_reserva import StatusReserva
 
 router = APIRouter()
 
@@ -9,7 +10,7 @@ router = APIRouter()
 def get_dashboard():
     db = SessionLocal()
 
-    reservas_ativas = db.query(Reserva).filter(Reserva.status == "ATIVA").count()
+    reservas_ativas = db.query(Reserva).filter(Reserva.status != StatusReserva.cancelada).count()
     total_residentes = db.query(Usuario).count()
     db.close()
 

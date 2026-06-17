@@ -191,6 +191,9 @@
     Não tem conta?
     <span class="font-bold border-b border-primary/20">Cadastre-se</span>
 </a>
+<a href="/sindico/login" class="mt-3 inline-flex items-center justify-center gap-2 text-sm font-semibold text-primary hover:text-primary-container transition-colors">
+    Acesso do síndico
+</a>
 </div>
 </div>
 <!-- Footer Meta -->
@@ -224,8 +227,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     });
 
     if (response.ok) {
-        // 🔥 redireciona para tua rota FastAPI
-        window.location.href = "/morador/";
+        const data = await response.json();
+        window.location.href = data.is_sindico ? "/sindico/dashboard" : "/morador/";
     } else {
         const data = await response.json().catch(() => null);
 
